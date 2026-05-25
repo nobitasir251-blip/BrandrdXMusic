@@ -1,4 +1,3 @@
-```python id="j9d3la"
 import os
 import time
 import asyncio
@@ -301,4 +300,4 @@ async def welcome(client, message: Message):
 
         except Exception as ex:
             print(ex)
-```
+
