@@ -58,16 +58,20 @@ async def start_pm(client, message: Message, _):
         if name.startswith("sud"):
             await sudoers_list(client=client, message=message, _=_)
 
-            if await is_on_off(2):
-                await app.send_message(
-                    chat_id=config.LOGGER_ID,
-                    text=f"""
+            try:
+                if await is_on_off(2):
+                    await app.send_message(
+                        chat_id=config.LOGGER_ID,
+                        text=f"""
 {message.from_user.mention} checked sudo list.
 
 User ID : {message.from_user.id}
 Username : @{message.from_user.username}
 """,
-                )
+                    )
+            except:
+                pass
+
             return
 
         if name.startswith("inf"):
@@ -135,15 +139,7 @@ Username : @{message.from_user.username}
             f"Welcome Baby {message.from_user.mention} ❣️"
         )
 
-        texts = [
-            "🥳",
-            "💥",
-            "🤩",
-            "💌",
-            "💞",
-        ]
-
-        for emoji in texts:
+        for emoji in ["🥳", "💥", "🤩", "💌", "💞"]:
             await asyncio.sleep(0.3)
             await lol.edit_text(
                 f"Welcome Baby {message.from_user.mention} {emoji}"
@@ -217,19 +213,22 @@ Username : @{message.from_user.username}
         reply_markup=InlineKeyboardMarkup(out),
     )
 
-    if await is_on_off(config.LOG):
-        sender_id = message.from_user.id
-        sender_name = message.from_user.first_name
+    try:
+        if await is_on_off(2):
+            sender_id = message.from_user.id
+            sender_name = message.from_user.first_name
 
-        await app.send_message(
-            config.LOG_GROUP_ID,
-            f"""
+            await app.send_message(
+                config.LOG_GROUP_ID,
+                f"""
 {message.from_user.mention} has started bot.
 
 User ID : {sender_id}
 User Name : {sender_name}
 """,
-        )
+            )
+    except:
+        pass
 
 
 @app.on_message(filters.command(["start"]) & filters.group & ~BANNED_USERS)
@@ -300,4 +299,3 @@ async def welcome(client, message: Message):
 
         except Exception as ex:
             print(ex)
-
