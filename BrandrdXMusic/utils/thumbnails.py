@@ -12,7 +12,7 @@ from unidecode import unidecode
 from youtubesearchpython.__future__ import VideosSearch
 
 from BrandrdXMusic import app
-thumb = f"https://i.ytimg.com/vi/{videoid}/hqdefault.jpg"
+from config import YOUTUBE_IMG_URL
 
 
 def changeImageSize(maxWidth, maxHeight, image):
