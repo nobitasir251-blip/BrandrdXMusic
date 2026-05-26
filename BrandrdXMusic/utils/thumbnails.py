@@ -43,7 +43,7 @@ async def gen_thumb(
     image = Image.open(background).convert("RGB")
     image = image.resize((1280, 720))
 
-    # Blur Effect
+    # Blur Background
     blur = image.filter(ImageFilter.GaussianBlur(8))
 
     # Dark Overlay
@@ -62,6 +62,7 @@ async def gen_thumb(
         radius=40,
         fill=255,
     )
+
     thumb.putalpha(mask)
 
     blur.paste(thumb, (60, 180), thumb)
@@ -81,7 +82,7 @@ async def gen_thumb(
     # Title Wrap
     title = textwrap.fill(title, width=28)
 
-    # Title
+    # Song Title
     draw.text(
         (620, 190),
         title,
@@ -121,7 +122,7 @@ async def gen_thumb(
         fill="#FFFFFF",
     )
 
-    # Bottom Line
+    # Bottom Stylish Line
     draw.rounded_rectangle(
         [(50, 650), (1230, 665)],
         radius=20,
@@ -141,11 +142,15 @@ async def gen_thumb(
         logo = Image.open(LOGO_FILE).convert("RGBA")
         logo = logo.resize((120, 120))
 
-        mask = Image.new("L", logo.size, 0)
-        draw_logo = ImageDraw.Draw(mask)
-        draw_logo.ellipse((0, 0, 120, 120), fill=255)
+        logo_mask = Image.new("L", logo.size, 0)
+        draw_logo = ImageDraw.Draw(logo_mask)
 
-        logo.putalpha(mask)
+        draw_logo.ellipse(
+            (0, 0, 120, 120),
+            fill=255,
+        )
+
+        logo.putalpha(logo_mask)
 
         blur.paste(logo, (1100, 30), logo)
 
@@ -156,3 +161,22 @@ async def gen_thumb(
         os.remove(background)
 
     return final
+
+
+# IMPORTANT FUNCTION FOR BOT
+async def get_thumb(
+    videoid: str,
+    title: str,
+    user_name: str,
+    duration: str,
+    views: str = "Unknown",
+    channel: str = "YouTube",
+):
+    return await gen_thumb(
+        videoid=videoid,
+        title=title,
+        user_name=user_name,
+        duration=duration,
+        views=views,
+        channel=channel,
+    )
